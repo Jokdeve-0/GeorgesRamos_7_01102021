@@ -1,0 +1,11 @@
+footer{
+    width:100%;
+    background:$color-grey-dk;
+    color:#fff;
+    font-size:.7em;
+    & a{
+        margin-left: 5px;
+        font-weight: 600;
+        color: $color-sec;
+    }
+}

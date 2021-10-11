@@ -1,0 +1,46 @@
+#navbarScroll{
+    @media(min-width:$lg){
+        @include flex-mix($content:flex-end);
+    }
+    & div:nth-child(1){
+        @include flex-mix();
+    }
+}
+.navbar{
+    padding: 1.5em;
+}
+.navbar img{
+    width:100%;
+}
+.navbar-brand{
+    width:45%!important;
+    @media(min-width:$sm){
+        width:35%!important;
+    }
+    @media(min-width:$med){
+        width:30%!important;
+    }
+    @media(min-width:$lg){
+        width:20%!important;
+    }
+    @media(min-width:$xl){
+        width:15%!important;
+    }
+    @media(min-width:$xxl){
+        width:10%!important;
+    }
+}
+
+.navbar-toggler{
+    &:focus{
+        border:1px solid #fff !important;
+        border:2px solid $color-sec !important;
+    }
+    & span{
+        border:3px solid $color-sec ;
+        border-radius: 50%;
+    }
+}
+.navbar-nav.navbar-nav-scroll{
+    height:50px;
+}

@@ -1,0 +1,11 @@
+#error-pseudo,#error-email,#error-password,#error-message,#error-confPassword,#error-comment{
+    position:relative;
+    font-size:.9em;
+    font-weight: 700;
+    text-align: center;
+    background: rgb(235, 7, 7);
+    color:#fff;
+    border-radius: 15px;
+    padding: .2em 1em;
+    z-index:99;
+}

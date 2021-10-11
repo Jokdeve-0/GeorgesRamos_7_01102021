@@ -1,0 +1,58 @@
+#home-app{
+    background-image: url('./img/social_media.png');
+    background-position: 50% 50%;
+    background-size: contain;
+    padding: 2em;
+    @media(min-width:$lg){
+        
+    }
+    @media(min-width:$med){
+		width:80%;
+		margin: auto;
+	}
+	@media(min-width:$lg){
+        @include flex-mix();
+        min-height:80vh;
+		width:75%;
+		margin: auto;
+	}
+    & .card-header{
+        background: $color-grey-dk;
+        color:$color-sec;
+        text-shadow: 2px 2px 20px #fff;
+        font-size:1.5em;
+        
+    }
+    & img {
+        width:100%;
+        @media(min-width:444px){
+            width:90%;
+            margin-left:5%;
+        }
+        @media(min-width:$sm){
+            width:80%;
+            margin-left:10%;
+        }
+        @media(min-width:$med){
+            width:60%;
+            margin-left:15%;
+        }
+        @media(min-width:$lg){
+            width:90%;
+            margin-left:5%;
+        }
+    }
+    & h1{
+        font-size:1.5em;
+    }
+    & h2{
+        font-size:1.2em;
+    }
+    & hr{
+        margin: 1em 5em;
+    }
+    & .card-text{
+        font-size:1.2em;
+        border:none;
+    }
+}

@@ -1,0 +1,20 @@
+#menu-forum{
+    @include flex-mix();
+    padding: .5em 0;
+    & button {
+        font-size: 2em;
+        border-radius:25px;
+        box-shadow: 0px 0px 15px $color-grey-med;
+        & small{
+            display: none;
+            font-size:.4em;
+            margin-left:.3em;
+            @media(min-width:$sm){
+                display: block;
+            }
+            @media(min-width:$med){
+                font-size: .5em;
+            }
+        }
+    }
+}

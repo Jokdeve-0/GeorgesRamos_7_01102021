@@ -1,0 +1,96 @@
+.container-fluid.login{
+    @include flex-mix($items:start);
+    background-image: url('./img/social_media.png');
+    background-position: 50% 50%;
+    background-size: contain;
+    padding: 1em;
+    min-height:80vh;
+    .box-form {
+        min-height:300px;
+        background-color: $color-grey-dk;
+        color: #fff;
+        width:100%;
+        padding: 1em;
+        border-radius: 10px;
+        @media(min-width:414px){
+            margin-top:100px;
+            width:90%;
+        }
+        @media(min-width:$sm){
+            width:85%;
+        }
+        @media(min-width:$med){
+            margin-top:2em;
+            width:60%;
+        }
+        @media(min-width:$lg){
+            width:40%;
+        }
+        @media(min-width:$xl){
+            width:30%;
+        }
+    
+        & h2 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+    
+        & div {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+            border: 1px solid $color-grey-lg;
+            padding: .5em;
+            border-radius: 5px;
+    
+            & label {
+                margin-bottom: 5px;
+            }
+    
+            & input {
+                display: block;
+                width: 100%;
+                padding: 10px 20px;
+                border: 3px solid $color-sec;
+                border-radius: 5px;
+                transition: 0.4s ease;
+            }
+
+            & small{
+                font-size:.8em;
+                font-weight: 700;
+                background: rgba(0,150,0,1);
+                // color:$color-grey-dk;
+                border-radius: 10px;
+                padding: .4em;
+                margin-top: .5em;
+            }
+    
+            & input:focus {
+                outline: none;
+                border: 3px solid $color-pri;
+            }
+        }
+        & p{
+            font-size: .8em;
+            & a {
+                margin-left: 5px;
+                font-weight: 600;
+                color: $color-sec;
+            }
+        }
+    }
+}
+
+
+.signup{
+
+    & .box-form {
+        min-height:550px!important;
+        @media(min-width:414px){
+            margin-top:1em!important;
+        }
+
+    }
+}

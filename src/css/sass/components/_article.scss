@@ -1,0 +1,122 @@
+
+.card{
+    background: $color-grey-lg;
+    margin-bottom: 1em;
+    width:100%;
+    box-shadow: 0px 0px 15px $color-grey-med;
+    border-radius:15px!important;
+    & .card-body{
+        padding: .5em!important;
+        background: $color-grey-lg;
+        font-size: .8em;
+        border-radius:15px;
+        & .top-card{
+            & span{
+                @include flex-mix($content:start);
+                font-size:.9em;
+                @media(min-width:$med){
+                    font-size:1em;
+                }
+            }
+        }
+        & .poste{
+            font-size:1em;
+            color:$color-grey-med;
+            & ~ span{
+                font-size:1em;
+            }
+        }
+        & .card-text{
+            font-size: 1em;
+            padding: .2em .5em;
+            border:1px solid $color-grey-lg;
+            background: #fff;
+            border-radius:5px;
+        }
+        & .card-text.pseudo{
+            @include flex-mix();
+            font-size:1em;
+            font-weight: 700;
+            background: $color-sec;
+            padding: 0 .3em;
+            border-radius:10px;
+            height:30px;
+            box-shadow: 0px 0px 15px $color-grey-med;
+        }
+    }
+    & .card-comment{
+        background: $color-sec;
+    }
+    & .card-body:nth-child(3){
+        & input{
+            font-size: .8em;
+        }
+    }
+    & .box-liker{
+        @include flex-mix($content:flex-end);
+        width:100%;
+        & .item-like{
+            @include flex-mix($content:center,$items:center);
+            margin: .5em .5em;
+            color:$color-grey-med;
+            & .icon{
+                font-size:1.5em;
+                cursor: pointer;
+            }
+            & .up{
+                color:rgb(108, 158, 32);
+                &.used{
+                    color:$color-grey-med;
+                    cursor:default;
+                }
+            }
+            & .down{
+                color:rgb(172, 14, 14);
+                &.used{
+                    color:$color-grey-med;
+                }
+            }
+            
+        }
+    }
+
+}
+
+#counterComments{
+    font-size :1em;
+    & ~ svg{
+        font-size:1em;
+    }
+}
+
+
+.input-comment ~ button{
+    transition: all .3s ease-in-out;
+}
+.input-comment:focus{
+    background: rgba(248, 222, 245, 0.5)!important;
+}
+.input-comment:focus ~ button{
+    background: $color-grey-dk;
+    color:#fff;
+}
+.input-comment ~ button:focus{
+    background: #000;
+    color:#fff;
+}
+.input-comment ~ button:active{
+    background: rgb(6, 153, 18);
+}
+
+
+.dropdown-toggle{
+    margin:0!important;
+    padding: 0!important;
+    width:35px;
+    height:35px;
+}
+.dropdown-toggle::after{
+    display:none!important;
+}
+
+

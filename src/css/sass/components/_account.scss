@@ -1,0 +1,104 @@
+.card-profile{
+    width:90%;
+    background: $color-sec!important;
+    margin-top:2em;
+    @media(min-width:$sm){
+        width:65%;
+    }
+    @media(min-width:$med){
+        width:50%;
+    }
+    @media(min-width:$lg){
+        width:40%;
+    }
+    @media(min-width:$xl){
+        width:35%;
+    }
+    @media(min-width:$xxl){
+        width:30%;
+    }
+    & .list-group-item{
+        min-height:70px;
+        @include flex-mix($content:start)
+    }
+    & label{
+        @include flex-mix($content:start);
+    }
+    & img{
+        border-radius:50%;
+        padding: 2em;
+        background: $color-grey-dk;
+    }
+    & .mod-img{
+        @include flex-mix();
+        position: absolute;
+        top:1em;
+        right:1em;
+        width:50px;
+        height:50px;
+        font-size:2em;
+        color:$color-sec;
+        border-radius:50%;
+        background: $color-grey-med;
+    }
+    & .icon-pen{
+        position:absolute;
+        right:1em;
+        bottom:1em;
+        font-size:1.5em;
+        color: $color-grey-dk;
+        &.notvalid{
+            font-size:2em;
+            right:.5em;
+            bottom:1em;
+        }
+    }
+    & .icon-delete{
+        font-size:2em;
+        color:$color-pri;
+    }
+    & .list-group-item{
+        margin: .5em 0;
+    }
+    & .spanIcon{
+        position:absolute;
+        right:.6em;
+        bottom:0;
+        font-size:1.8em;
+        color: rgb(24, 193, 24)
+    }
+}
+
+.article-profile{
+    width:90%;
+    margin: .5em .5em;
+    padding: .2em 1em;
+    background-image:repeating-linear-gradient($color-sec,#fff,$color-sec);
+    border:2px solid $color-grey-lg;
+    border-radius: 25px;
+    text-shadow: 0 0 2px #fff;
+    font-size:.8em;
+    &.modify{
+        font-size:1em;
+        background-image:repeating-linear-gradient($color-grey-lg,$color-sec,$color-grey-lg);
+    }
+}
+.users{
+    width:100%!important;
+    padding: .2em .5em;
+  & span{
+     font-size:.8em;
+  }
+}
+    
+.icon-valid{
+    color:rgb(24, 193, 24);
+    margin-left: 1em;
+    margin-bottom: 0em!important;
+}
+
+
+
+.hide{
+    display:none;
+}

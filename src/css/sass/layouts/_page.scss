@@ -1,0 +1,26 @@
+#root {
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+main{
+	@include flex-mix($items:start);
+    flex:1;
+	// @media(min-width:$med){
+	// 	width:80%;
+	// 	margin: auto;
+	// }
+	// @media(min-width:$lg){
+	// 	width:75%;
+	// 	margin: auto;
+	// }
+	// @media(min-width:$xl){
+	// 	width:65%;
+	// 	margin: auto;
+	// }
+	// @media(min-width:$xl){
+	// 	width:50%;
+	// 	margin: auto;
+	// }
+}

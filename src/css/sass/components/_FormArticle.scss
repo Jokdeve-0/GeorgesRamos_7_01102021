@@ -1,0 +1,107 @@
+.formArticle{
+    background: $color-sec!important;
+    margin: auto;
+    margin-bottom: 1em;
+    width:95%;
+    font-size: .8em;
+    border-radius:20px;
+    box-shadow: 0px 0px 15px $color-grey-med;
+    @media(min-width:$med){
+        width:98%;
+    }
+    @media(min-width:$lg){
+        width:100%;
+    }
+    & #message {
+            min-height:100px;
+            max-height:400px;
+            font-size: 1em;
+            width:100%;
+            padding: 2em .5em 0;
+            @media(min-width:$med){
+                min-height:60px;
+                max-height:400px;
+            }
+        }
+    & .form-message{
+        @include flex-mix();
+        @media(min-width:$med){
+            @include flex-mix($content:flex-start);
+        }
+        & .form-floating:nth-child(1){
+            width:100%;
+            margin-bottom: 1em;
+            @media(min-width:$med){
+                width:58%;
+            }
+            @media(min-width:$lg){
+                width:55%;
+            }
+            @media(min-width:$xxl){
+                width:58%;
+            }
+        }
+
+        & .form-floating:nth-child(3){
+            width:70%;
+            margin-bottom: 1em;
+            @media(min-width:$med){
+                width:30%;
+            }
+            @media(min-width:$lg){
+                width:35%;
+            }
+            @media(min-width:$xxl){
+                width:30%;
+            }
+        }
+        
+        
+    }
+    & .card-title{
+        font-size: 1em;
+        @media(min-width:$med){
+            font-size: 1.2em;
+        }
+    }
+    & button {
+        font-size:1.2em;
+        @media(min-width:$med){
+            font-size: 1.5em;
+        }
+    }
+    
+    & #genre{
+        font-size:1em;
+        height:58px;
+    }
+}
+.form_file{
+    @include flex-mix();
+    height: 60px;
+    padding: .2em;
+    margin-bottom: 1em;
+    & label{
+        @include flex-mix();
+        border:1px solid $color-pri;
+        border-radius: 5px;
+        background: #fff;
+        padding:.2em .5em;
+        cursor: pointer;
+        font-size:.9em;
+
+
+        & svg{
+            font-size: 50px;
+        }
+    }
+    & input{
+        display:none;
+    }
+}
+
+.icon-return{
+    font-size:2em;
+    width:50px;
+    color:$color-sec;
+}

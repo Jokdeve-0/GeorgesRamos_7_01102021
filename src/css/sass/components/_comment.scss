@@ -1,0 +1,34 @@
+.cont-comment{
+    background: $color-grey-lg;
+    & div p.comment, & .answer  p {
+        max-width:150px;
+        border-radius:25px;
+        @media(min-width:$sm){
+            max-width: 250px;
+        }
+        @media(min-width:$med){
+            max-width: 300px;
+        }
+    }
+    & .body-comment, & .body-recomment{
+        & input{
+            width:80%;
+            height:25px;
+        }
+    }
+}
+
+.dates{
+    font-size: .6em;
+    color:rgb(155, 155, 155);
+}
+.profiler{
+    background: rgb(253, 209, 209);
+}
+.avatPseudo {
+    &.answers span{
+        @include flex-mix();
+    }
+}
+
+

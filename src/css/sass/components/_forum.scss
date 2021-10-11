@@ -1,0 +1,63 @@
+.box-top.desk{
+    & #container-forum{
+        width:95%;
+        margin: auto;
+        @media(min-width:$sm){
+            width:90%;
+        }
+        @media(min-width:$med){
+            width:80%;
+        }
+        @media(min-width:$lg){
+            width:75%;
+        }
+        @media(min-width:$xl){
+            width:70%;
+        }
+    }
+}
+#aside-menu{
+    padding: .4em;
+    border-radius:5px;
+    box-shadow: 0px 0px 15px $color-grey-med;
+    .NavCat{
+        border: 1px solid $color-pri;
+        border-radius: 5px;
+        background: $color-sec;
+        color:$color-grey-dk;
+        width:95%;
+        margin:.1em auto;
+        text-decoration: none;
+        padding-left: .4em;
+        font-size:1em;
+        box-shadow: 0px 0px 15px $color-grey-med;
+        @media(min-width:$lg){
+            font-size: .9em;
+        }
+        &:hover{
+            color:$color-grey-med;
+            background: $color-grey-lg;
+        }
+    }
+    & p {
+        color:$color-grey-dk;
+        text-shadow: 0 0 5px $color-sec;
+        padding-left: .5em;
+        margin: 0;
+    }
+}
+
+// div.border:nth-child(2),.p-2.border{
+//     background: $color-sec;
+// }
+// menu left
+.d-none.d-md-block{
+    background: $color-grey-lg;
+}
+.box-cards{
+    padding: 0 1em;
+    @media(min-width:$lg){
+        padding-left: 2em;
+
+    }
+}
