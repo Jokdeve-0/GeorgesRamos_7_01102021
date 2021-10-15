@@ -3,8 +3,8 @@ import { NavLink } from "react-router-dom"
 import {Navbar,Nav} from 'react-bootstrap';
 import logo from '../../../css/img/icon-left-font-monochrome-white.png'
 import initDatas from "../../utils/InitDatas"
-function Login(){
 
+function Login(){
     return(<>
 
         <header>        
@@ -30,7 +30,7 @@ function Login(){
                             <input type="email" id="Email" placeholder="Example@groupomania.com"/>
                         </div>
                         <div>
-                            <label htmlFor="Password">Password</label>
+                            <label htmlFor="Password" aria-label="Entrez votre mot de passe">Password</label>
                             <input type="password" id="Password" placeholder="********" />
                         </div>
                         <button type="button" className="btn-form" aria-label="boutton pour valider le formulaire de connexion"

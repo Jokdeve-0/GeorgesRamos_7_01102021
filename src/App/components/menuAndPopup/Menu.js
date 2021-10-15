@@ -6,8 +6,8 @@ import {BsShieldLock} from "react-icons/bs";
 import { DatasContext } from "../../../App";
 import requestsAdmin from "../../utils/RequestsAdmin";
 
-
 const Menu = ({token,profile}) => {
+
 	const datas = React.useContext(DatasContext)
 
 	return(
@@ -15,11 +15,11 @@ const Menu = ({token,profile}) => {
 			<Button className="d-flex justify-content-center align-items-center" variant="outline-danger" onClick={ async ()=>{
 			await initDatas.initializeGlobalDatas({token:token})
 			document.location.href = "/forum"
-			}}><TiArrowSyncOutline/><small>Actualité</small></Button>
+			}} aria-label="Actualisé la page" ><TiArrowSyncOutline/><small>Actualité</small></Button>
 			<Button className="ms-3 d-flex justify-content-center align-items-center" variant="outline-danger" 
-				onClick={()=>{document.location.href="/popular"}}><TiGroupOutline/><small>Populaire</small></Button>
+				onClick={()=>{document.location.href="/popular"}} aria-label="afficher les articles les plus populaire" ><TiGroupOutline/><small>Populaire</small></Button>
 			<Button className="ms-3 d-flex justify-content-center align-items-center" variant="outline-danger" 
-				onClick={()=>{document.location.href="/tendance"}}><TiThumbsUp/><small>Tendances</small></Button>
+				onClick={()=>{document.location.href="/tendance"}} aria-label="afficher les articles les plus tendance" ><TiThumbsUp/><small>Tendances</small></Button>
 
 			{datas.ranking[0] === "BOSS"? 
 				<Button className="ms-3 d-flex justify-content-center align-items-center" variant="outline-danger" 
@@ -28,7 +28,7 @@ const Menu = ({token,profile}) => {
                     if(req.message){
                         document.location.href='/Admin-panel'
 					}
-				 }}><BsShieldLock/><small>Admin Panel</small></Button>
+				 }} aria-label="Acceder aux parametres d'administration" ><BsShieldLock/><small>Admin Panel</small></Button>
 			:
 				null
 			}

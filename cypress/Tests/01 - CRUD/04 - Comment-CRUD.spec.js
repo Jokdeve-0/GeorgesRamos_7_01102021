@@ -8,7 +8,7 @@ describe(`A user wants to handle an comment`, () => {
 			.get('.btn-form').click()
 	})
     it(`Publish an comment with invalid data to control all validations then with valid data must be create an comment`, () => {
-        cy.get('.counter').click()
+        cy.get('.counter').first().click()
         // With no data
         .get('.btn.btn-outline-secondary').first().click()
         .get('#error-comment').should('have.text', 'Le commentaire est invalide!')
@@ -18,16 +18,16 @@ describe(`A user wants to handle an comment`, () => {
         .get('.my-0.border.p-2.bg-light.comment').first().should('have.text','Mon commentaire !')
     })
     it(`Modify an comment with invalid data to control all validations then with valid data must be modify an comment`,()=>{
-        cy.get('.counter').click()
+        cy.get('.counter').first().click()
         .get('.dropdown').eq(1).children('button').click()
         .get('.dropdown-item').first().click()
         // with no datas
         .get('.body-comment.my-0.px-2').children('div').first().children('input').clear()
-        .get('.icon-valid.h5').click()
+        .get('.icon-valid.h5').first().click()
         .get('#error-comment').should('have.text', 'Le commentaire est invalide!')
         // with valid datas
         .get('.body-comment.my-0.px-2').children('div').first().children('input').type('hello world')
-        .get('.icon-valid.h5').click()
+        .get('.icon-valid.h5').first().click()
         .get('.my-0.border.p-2.bg-light.comment').first().should('have.text','hello world')
     })
 })

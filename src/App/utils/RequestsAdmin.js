@@ -107,6 +107,34 @@ class RequestsAdmin {
             return false
         }
     }
+    /** Delete a user
+     * @param {STRING} token 
+     * @param {OBJECT} email  
+     * @returns REPONSE
+     */
+     remove_profile = async (token, email) => {
+        try {
+            const req = await fetch(`http://localhost:3000/auth/byeByAdmin`, {
+                method: "DELETE",
+                body: JSON.stringify(email),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                    'Accept': 'application/json',
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+            return req.json()
+        } catch (e) {
+            console.log(`"ERROR => { FETCH DELETE USER } \nERROR-RECOVER : ${e}`)
+            return false
+        }
+    }
+    
+    /** Modify user password
+     * @param {STRING} token 
+     * @param {OBJECT} datas 
+     * @returns RESPONSE
+     */
 }
 const requestsAdmin = new RequestsAdmin()
 export default requestsAdmin

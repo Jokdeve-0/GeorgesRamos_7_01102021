@@ -7,7 +7,7 @@ import Dislike from "./liker/display_dislikers"
 
 
 const CardArticle = ({token,article,profile,setArticles,admin}) => {
-    const displaysModificationMenu = profile.id === article.creatorId || profile.rank === "BOSS" ? true : false
+    // const displaysModificationMenu = profile.id === article.creatorId || profile.rank === "BOSS" || article.repost === "true"? true : false
 
     return(
         <Card.Body>
@@ -17,11 +17,11 @@ const CardArticle = ({token,article,profile,setArticles,admin}) => {
                         <span className="me-2 article-genre">{article.genre}</span>
                         <span className="poste"><small>Posté le {article.dates}</small></span>
                     </div>
-                    {displaysModificationMenu?
+                    {/* {displaysModificationMenu? */}
                         <ModificationMenu token={token} article={article} setArticles={setArticles} profile={profile} admin={admin} />
-                    :
+                    {/* :
                     null
-                }
+                } */}
                 </div>
                 {article.valide !==0 ? 
                     null
@@ -42,6 +42,8 @@ const CardArticle = ({token,article,profile,setArticles,admin}) => {
                     </div>
                 </div>
                 }
+                {article.repost === "true" ? <p className="partage">{`A partager l'article de ${article.oldPseudo}`}</p> : null }
+               
                 
                 <Card.Text className="m-0 comment">{article.message}</Card.Text>
         </Card.Body>

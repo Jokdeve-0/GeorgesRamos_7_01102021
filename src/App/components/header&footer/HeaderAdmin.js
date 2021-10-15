@@ -11,10 +11,8 @@ const HeaderAdmin = ({token}) => {
             <Navbar.Collapse id="navbarScroll">
                 <Nav className="mr-auto my-2 my-lg-0 text-light"  navbarScroll >
                 <NavLink className="btn-hover profile mb-1" aria-label="Lien vers votre profile" to="/account"></NavLink>
-                <NavLink className="btn-hover forum mb-1" aria-label="Lien vers la page des articles" to="/forum"onClick={async (e) => {
-                    e.preventDefault()
+                <NavLink className="btn-hover forum mb-1" aria-label="Lien vers la page des articles" to="/forum"onClick={async () => {
                     await initDatas.initializeGlobalDatas({token:token})
-			        document.location.href = "/forum"
                 }}></NavLink>
                 </Nav>
             </Navbar.Collapse>

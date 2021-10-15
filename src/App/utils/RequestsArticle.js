@@ -46,6 +46,7 @@ class RequestsArticle {
     articles_by_user = async (token,id) => {
         try {
             const req = await fetch(`http://localhost:3000/articles/users`, {
+                
                 method:"POST",
                 body: JSON.stringify({id:id}),
                 headers: {
@@ -116,6 +117,27 @@ class RequestsArticle {
             return req.json()
         } catch (e) {
             console.log(`"ERROR => { FETCH CREATE ARTICLE } \nERROR-RECOVER : ${e}`)
+            return false
+        }
+    }
+    /**
+     * repost article
+     * @param {STRING} token 
+     * @param {OBJECT} data 
+     */
+    repost_article = async (token,data) => {
+        try {
+            const req = await fetch(`http://localhost:3000/articles/repostArticle`,
+                {
+                method: "POST",
+                body: data,
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+            return req.json()
+        } catch (e) {
+            console.log(`"ERROR => { FETCH REPOST ARTICLE } \nERROR-RECOVER : ${e}`)
             return false
         }
     }

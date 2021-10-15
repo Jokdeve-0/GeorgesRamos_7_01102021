@@ -8,7 +8,7 @@ describe(`A user wants to handle an article`, () => {
 	beforeEach(() => {
 		cy.visit('http://localhost:3001')
 			.get('.btn-hover.login.mb-1').click()
-			.get('#Email').type('max@groupomania.fr')
+			.get('#Email').type('georges@groupomania.fr')
 			.get('#Password').type('Aa@0Aa@0')
 			.get('.btn-form').click()
 	})

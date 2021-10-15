@@ -13,9 +13,9 @@ function ArticleForm({setArticles,profile,token}) {
         setFileData(e.target.files[0]);
     };
   return (
-    <div className="p-2 border formArticle">
+    <section className="p-2 border formArticle">
         <Card.Body className="p-0 mb-1 d-flex justify-content-between align-items-center">
-            <Card.Title className="m-0 text-dark">Envie de partager ?</Card.Title>
+        <h2 className="h5">Envie de partager ?</h2>
             <Button variant="light" aria-label="ouvrir le formulaire" onClick={() => setOpen(!open)} aria-controls="Postez un message" aria-expanded={open}>
                 <TiMessages/>
             </Button>
@@ -35,7 +35,6 @@ function ArticleForm({setArticles,profile,token}) {
                         placeholder="Ecrivez votre message..."
                         />
                     </FloatingLabel>
-                    
                     <div className="form_file">
                         <label className="d-flex" aria-label="Telecharger une image" htmlFor="image"><TiImageOutline/></label>
                         <input type="file" id="image" name="image" onChange={file_change_handler} />
@@ -50,7 +49,7 @@ function ArticleForm({setArticles,profile,token}) {
                 <button className="btn-form" type="submit"  aria-label="Enregistrer votre article">Postez votre message</button>
             </form>
         </Collapse>
-    </div>
+    </section>
     );
 }
 

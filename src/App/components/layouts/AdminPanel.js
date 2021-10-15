@@ -1,5 +1,7 @@
 import React,{useState} from "react"
 import { BiLeftArrowCircle } from "react-icons/bi"
+
+import { MdDeleteForever} from "react-icons/md"
 import { DatasContext } from "../../../App"
 import initDatas from "../../utils/InitDatas"
 import HeaderAdmin from "../header&footer/HeaderAdmin"
@@ -7,7 +9,7 @@ import Article from "../article/Article"
 import { AiOutlineSetting } from "react-icons/ai"
 import {GiConfirmed } from "react-icons/gi"
 import requestsAdmin from '../../utils/RequestsAdmin'
-
+import { NavLink } from "react-router-dom"
 
 const AdminPanel = () => {
 
@@ -20,7 +22,7 @@ const AdminPanel = () => {
     let answersState = null
     let userId = null
     let ranking = null
-    
+
     if(localStorage.getItem('ACCESS_TOKEN') === null){
         // If token is not null or not valid => redirect to home
         document.location.href='/'
@@ -40,55 +42,81 @@ const AdminPanel = () => {
 
     const [articles,setArticles] = useState(articlesState )
     const [comments,setComments] = useState(commentsState.all_comments )
-    const answers = answersState.all_answers
+    const [answers,setAnswers] = useState(answersState)
     const [users,setUsers] = useState(usersState)
 
     // Display Btn of Validation modify user rank
     let [btnDisplay,setBtnDisplay] = useState(false)
     return(
     <>
-    <header>
-        <HeaderAdmin token={token} />
-        <p onClick={ async ()=>{
-            await initDatas.initializeGlobalDatas({token:token})
-			document.location.href = "/forum"
-        }}><BiLeftArrowCircle className='icon-return'/></p>
-    </header>
-        <main>
-            <h1 key="h1-admin-panel" className="article-profile modify">PANNEAU D'ADMINISTRATION</h1>
+        <header>
+            <HeaderAdmin token={token} />
+            <NavLink aria-label="lien vers le forum" to="/forum" onClick={ async ()=>{
+                await initDatas.initializeGlobalDatas({token:token})
+            }}><BiLeftArrowCircle className='icon-return'/></NavLink>
+        </header>
+        <main className="box-top desk">
             {/* USER */}
+            <div id="container-forum">
+            <h1 key="h1-admin-panel" className="article-profile admin">PANNEAU D'ADMINISTRATION</h1>
             <section className="w-100" key="Admin-user">
-                <h2 className="article-profile">LES UTILISATEURS</h2>
+                <h2 key="rank-h2" className="article-profile">LES UTILISATEURS</h2>
                     <div className="d-flex p-2 w-100">
                         <span className="w-50">Email</span>
-                        <span className="d-flex justify-content-between w-50">Ranking <AiOutlineSetting onClick={()=>{setBtnDisplay(!btnDisplay)}}/></span>
+                        <span className="d-flex justify-content-end w-50">Ranking <AiOutlineSetting className="openAdmin" onClick={()=>{setBtnDisplay(!btnDisplay)}}/></span>
                     </div>
-                    <hr className="my-1"/>
+                    <hr className="my-1" key={`hr1-${profile.id}`}/>
                     {users.map(user => (
-                    <div className="d-flex justify-content-between users" key={`${(Math.random(999)+Date.now()).toString()}`} >
-                        <span key={`email-${user.id}`} className="w-50">{user.email}</span>
-                        <span key={`admin-${user.id}`} className="d-flex justify-content-end w-50">
+                    <div className="d-flex justify-content-between users" key={`${(Math.random(999)+Date.now()).toString()}-comment`} >
+                        <span key={`email-${user.id}`} className="d-flex align-items-center w-50">{user.email}</span>
+                        <span key={`admin-${user.id}`} className="ranking">
                             <select 
+                            aria-label="selectionner le rang de l'utilisateur"
                                 key={`Ranking-${user.id}`} 
                                 defaultValue={user.rank} 
                                 name="Ranking" 
                                 id={`Ranking-${user.id}`} 
-                                disabled={btnDisplay?"":"disabled"} 
-                                onFocus={()=>{
-                                    document.getElementById(`validRank-${user.id}`).classList.toggle('hide')
-                            }}>
+                                disabled={btnDisplay?"":"disabled"}>
                                 <option key={`option1-${user.id}`} value="BOSS">Administrateur</option>  
                                 <option key={`option2-${user.id}`} value="SOLDIER">Utilisateur</option>  
                             </select> 
-                            <GiConfirmed key={`validRank-${user.id}`} className='hide' onClick={async()=>{
+                            {btnDisplay? 
+                            <GiConfirmed key={`validRank-${user.id}`} onClick={async()=>{
                                 const modRanking = document.getElementById(`Ranking-${user.id}`).value
                                 await requestsAdmin.modify_rank(token,{email:user.email,rank:modRanking})
                                 await initDatas.initializeAllUsersInStorage(token,userId,ranking[0])
                                 setUsers(JSON.parse( localStorage.getItem('Users')))
-                                document.getElementById(`validRank-${user.id}`).classList.toggle('hide')
-                                setBtnDisplay(false)
+                                setBtnDisplay(!btnDisplay)
                             }} />
+                            :null} 
                         </span>
+                    </div>
+                    ))}
+            </section>
+            <section className="w-100" key="Admin-user-remove">
+                <h2 key="remove-h2" className="article-profile">LES UTILISATEURS</h2>
+
+                    {users.map(user => (
+                        <div key={`container-user-${user.id}`}>
+                    <div className="d-flex justify-content-between users" key={`${(Math.random(9999)+Date.now()).toString()}-answer`} >
+                        <span key={`answer-email-${user.id}`} className="d-flex align-items-center w-50">{user.email}</span>
+                        <span key={`answer-admin-${user.id}`} className="ranking">
+                            
+                             {btnDisplay? 
+                            <MdDeleteForever key={`validSup-${user.id}`} className="text-danger" onClick={async()=>{
+                                if(window.confirm(' !!! Attention !!! \nCette action est irréversible !\nEtes vous sur de vouloir supprimer le compte ?')){
+                                    await initDatas.delete_profile_admin(token,{email:user.email})
+                                    await initDatas.initializeAllUsersInStorage(token,userId,ranking[0])
+                                    await initDatas.initializeGlobalDatas({token:token})
+                                    setUsers(JSON.parse( localStorage.getItem('Users')))
+                                    setArticles(JSON.parse(localStorage.getItem('all_articles')))
+                                    setBtnDisplay(!btnDisplay)
+                                }
+                            }} />
+                            :null} 
+                        </span>
+                    </div>
+                    <hr className="my-1 d-block w-100" key={`hr2-${user.id}`}/>
                     </div>
                     ))}
             </section>
@@ -103,12 +131,11 @@ const AdminPanel = () => {
             <section className="w-100" key="Admin-comments">
                 <h2 className="article-profile">LES COMMENTAIRES EN MODERATION</h2>
                 <div className="head-comment d-flex">
-                    <span className="d-block w-25 py-2 px-1">Email</span>
+                    <span className="d-block w-25 py-2 px-1">Pseudo</span>
                     <span className="d-block w-50 py-2 px-1">Commentaire</span>
                     <span className="d-block w-25 py-2 px-1">Modérer</span>
                 </div>
                 <hr key={`hr-33`} className="my-1"/>
-
                 { comments.map((comment) =>comment.valide !== 0 ?
                 <div key={`comment-${comment.id}`} className="d-flex">
                     <span className="d-block w-25 py-2 px-1" key={`email-${comment.id}`}>{comment.pseudo}</span>
@@ -124,18 +151,23 @@ const AdminPanel = () => {
                     </span>
                 </div>
                 :null)}
-
                 {/* ANSWERS */}
-                { answers.map((answer) =>answer.valide !== 0 ?
+                { answers.all_answers.map((answer) =>answer.valide !== 0 ?
                 <div key={`answer-${answer.id}`} className="d-flex">
-                    <span className="w-25" key={`email-${answer.id}`}>{answer.pseudo}</span>
-                    <span className="w-50" key={`message-${answer.id}`}>{answer.message}</span>
-                    <span className="w-25 text-center pe-3" key={`btn-${answer.id}`}><GiConfirmed/></span>
-                    <hr className="" key={`hr-${answer.id}`}/>
+                    <span className="d-block w-25 py-2 px-1" key={`email-${answer.id}`}>{answer.pseudo}</span>
+                    <span className="d-block w-50 py-2 px-1" key={`message-${answer.id}`}>{answer.message}</span>
+                    <span className="d-block w-25 text-center pe-3" key={`btn-${answer.id}`}><GiConfirmed onClick={async()=>{
+                        const req = await requestsAdmin.moderation(token)
+                        if(req.message){
+                            const val = answer.valide !== 0 ? 0 : 1
+                            await requestsAdmin.moderate_answer(token,{answerId:answer.id,valide:val})
+                            await initDatas.initializeAnswersInStorage(token)
+                            setAnswers(JSON.parse(localStorage.getItem('answers')))
+                        }
+                    }}/></span>
                 </div>:null)}
-
             </section>
-
+            </div>
         </main>
     </>
     )

@@ -18,6 +18,7 @@ describe(`A user wants to handle an article`, () => {
             cy.get('.m-0.card-text.comment').first().should('have.text', 'Test of modification comment with cypress !')
             .get('.btn-admin').first().click()
             .get('.dropdown-menu.show').children('a').eq(1).click()
+            .wait(200)
             .get(".box-cards").children().then(($aft) => {
                 const After = $aft.length;
                 cy.log(After);

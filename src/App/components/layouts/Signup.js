@@ -28,6 +28,7 @@ function Signup(){
             }
         }
     }
+    
     return(<>
         <header>
             <Navbar bg="dark" expand="lg">
@@ -44,11 +45,11 @@ function Signup(){
         <main className="box-top desk">
             <div className="container-fluid login signup d-flex justify-content-center">
                 <div className="box-form">
-                    <h2>INSCRIPTION</h2> 
+                    <h1>INSCRIPTION</h1> 
                     <form>
                         <div>
-                            <label aria-label="Entrez votre nom d'utilisateur" htmlFor="Name">Nom d'utilisateur</label>
-                            <input type="text" id="Pseudo" placeholder="Entrez votre nom d'utilisateur" />
+                            <label htmlFor="Pseudo" aria-label="Entrez votre nom d'utilisateur">Nom d'utilisateur</label>
+                            <input type="text" id="Pseudo"  placeholder="Entrez votre nom d'utilisateur" />
                             <small> ⚠️ Au minimum deux caratères</small>
                         </div>
                         <div>

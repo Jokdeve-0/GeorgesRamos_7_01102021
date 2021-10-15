@@ -17,21 +17,21 @@
             width:90%;
         }
         @media(min-width:$sm){
-            width:85%;
+            width:55%;
         }
         @media(min-width:$med){
             margin-top:2em;
-            width:60%;
+            width:45%;
         }
         @media(min-width:$lg){
             width:40%;
         }
         @media(min-width:$xl){
-            width:30%;
+            width:25%;
         }
     
-        & h2 {
-            font-size: 24px;
+        & h1 {
+            font-size: 18px;
             font-weight: 600;
             margin-bottom: 30px;
         }
@@ -46,6 +46,7 @@
     
             & label {
                 margin-bottom: 5px;
+                font-size: 14px;
             }
     
             & input {
@@ -55,12 +56,13 @@
                 border: 3px solid $color-sec;
                 border-radius: 5px;
                 transition: 0.4s ease;
+                font-size:14px;
             }
 
             & small{
-                font-size:.8em;
+                font-size:12px;
                 font-weight: 700;
-                background: rgba(0,150,0,1);
+                background: #006700;
                 // color:$color-grey-dk;
                 border-radius: 10px;
                 padding: .4em;

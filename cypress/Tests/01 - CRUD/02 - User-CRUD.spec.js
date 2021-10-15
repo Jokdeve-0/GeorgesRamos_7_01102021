@@ -1,7 +1,7 @@
 /* eslint-disable jest/no-identical-title */
 /* eslint-disable no-undef */
 
-const {clearSignup,clearLogin} = require('../plugins/functions')
+const {clearSignup,clearLogin} = require('../../plugins/functions')
 
 describe(`A standard user wants to manage an account on the company's social network`, () => {
 	beforeEach(() => {
@@ -135,7 +135,7 @@ describe(`A standard user wants to manage an account on the company's social net
 			// Width valid pseudo
 			.get('#Pseudo').clear().type('NewPseudo')
 			.get('.icon-confirme').click()
-			.get('#label-pseudo').children('strong').should('have.text', 'Nom d\'utilisateur " NewPseudo "')
+			.get('#dplPseudo').should('have.text', 'Nom d\'utilisateur " NewPseudo "')
 			// MODIFY EMAIL
 			.wait(100)
 			.get('.openEmail').click()
@@ -153,17 +153,17 @@ describe(`A standard user wants to manage an account on the company's social net
 			// Width valid email
 			.get('#Email').clear().type('georges@groupomania.fr')
 			.get('.icon-confirme').click()
-			.get('#label-email').children('strong').should('have.text', 'Email " georges@groupomania.fr "')
+			.get('#dplEmail').should('have.text', 'Email " georges@groupomania.fr "')
 
 	})
-	it(`Delete a user must delete all of their articles with their comments, responses and images and the user's account`,()=>{
-        cy.visit('http://localhost:3001')
-            .get('.btn-hover.login.mb-1').click()
-            .get('#Email').type('georges@groupomania.fr')
-            .get('#Password').type('Aa@0Aa@0')
-            .get('.btn-form').click()
-            .get('.btn-hover.profile.mb-1').click()
-            .get('.icon-delete').click()
-            .get('.toast-header') 
-    })
+	// it(`Delete a user must delete all of their articles with their comments, responses and images and the user's account`,()=>{
+    //     cy.visit('http://localhost:3001')
+    //         .get('.btn-hover.login.mb-1').click()
+    //         .get('#Email').type('georges@groupomania.fr')
+    //         .get('#Password').type('Aa@0Aa@0')
+    //         .get('.btn-form').click()
+    //         .get('.btn-hover.profile.mb-1').click()
+    //         .get('.icon-delete').click()
+    //         .get('.toast-header') 
+    // })
 })

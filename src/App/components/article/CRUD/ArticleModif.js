@@ -23,10 +23,8 @@ function ArticleModif() {
   return (<>
     <header>
         <HeaderModifyArticle token={token} />
-        <NavLink aria-label="Lien vers votre profile" to="/account" onClick={async (e) => {
-                    e.preventDefault()
+        <NavLink aria-label="Lien vers votre profile" to="/account" onClick={async () => {
                     await initDatas.initializeGlobalDatas({token:token})
-			        document.location.href = "/forum"
                 }}><BiLeftArrowCircle className='icon-return'/></NavLink>
         
     </header>

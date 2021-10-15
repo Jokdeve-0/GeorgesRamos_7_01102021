@@ -16,12 +16,19 @@ const Profile = ({setArticles}) => {
     const datas = React.useContext(DatasContext)
     let token =""
     let profileState = []
+    let setComments
+    let setAnswers
     if(localStorage.getItem('ACCESS_TOKEN') === null){
         document.location.href='/'
     }else{
         token = datas.token[0].ACCESS_TOKEN
         profileState = datas.profile[0]
+        setComments = datas.comments[1]
+        setAnswers = datas.answers[1]
     }
+    const [profile,setProfile]=useState(profileState)
+
+    
 
     let [usernameEditing, setUsernameEditing] = useState(false)
     let [userEmailEditing, setUserEmailEditing] = useState(false)
@@ -33,7 +40,6 @@ const Profile = ({setArticles}) => {
     let [hideEmail, setHideEmail] = useState(false)
     let [hidePass, setHidePass] = useState(false)
 
-    const [profile,setProfile]=useState(profileState)
 
     const actionEmail = async () => {
         const req = await initDatas.change_email(token,profile)
@@ -47,21 +53,28 @@ const Profile = ({setArticles}) => {
         }
     }
     const actionPseudo = async () => {
-        const req = await initDatas.change_pseudo(token,profile.id)
+        const req = await initDatas.change_pseudo(token,profile.id,profile.pseudo)
         if(req.message){
-            setProfile(JSON.parse(localStorage.getItem('Profile')))
             await initDatas.initializeGlobalDatas({token:token})
+            setProfile(JSON.parse(localStorage.getItem('Profile')))
             setArticles(JSON.parse(localStorage.getItem('all_articles')))
+            setComments(JSON.parse(localStorage.getItem('comments')))
+            setAnswers(JSON.parse(localStorage.getItem('answers')))
             setUsernameEditing(false)
             setBtnValidName(false)
             setbtnValidPass(false)
             setHideName(false)
             setModifyPseudo(!modifyPseudo)
+            
         }
     }
     const actionPassword = async () => {
         const req = await initDatas.change_password(token,profile.id)
-        if(req.message){
+        if(req && req.error){
+            validations.error_password()
+            return false
+        }
+        if(req && req.message){
             setProfile(JSON.parse(localStorage.getItem('Profile')))
             setUserPassEditing(false)
             setBtnValidName(false)
@@ -69,6 +82,8 @@ const Profile = ({setArticles}) => {
             setbtnValidPass(false)
             setHidePass(false)
             setModifyPass(!modifyPass)
+        }else{ 
+            return false
         }
     }
 
@@ -78,14 +93,19 @@ const Profile = ({setArticles}) => {
 
     return(
         <Card className="card-profile" id="user-profile">
-            <Card.Img variant="top" src="./css/img/profile.jpeg" />
-            <p className="mod-img" aria-label="Modifier votre photo de profile"><MdCameraEnhance/></p>
+            <div className="profile-img">
+                <Card.Img variant="top" src="./css/img/profile.jpeg" alt="photo de profile"/>
+                <span className="mod-img"><MdCameraEnhance/></span>
+            </div>
             <ListGroup className="list-group-flush">
             {/* POPUP */ modifyPseudo? <Popup message={'Votre pseudo a été modifié !'} setModifyPseudo={setModifyPseudo} modifyPseudo={modifyPseudo}  />:null}
                 <ListGroupItem className="mt-3">
-                        <label aria-label="Entrez votre nom d'utilisateur" id="label-pseudo" htmlFor="Name"><strong className="w-100">Nom d'utilisateur " {profile.pseudo} "</strong>
-                        {usernameEditing ?<input type="text" id="Pseudo" placeholder="votre nouveau pseudo" />:<></>}
-                        </label>
+                        <p className="m-0 w-100"><strong id="dplPseudo">Nom d'utilisateur " {profile.pseudo} "</strong></p>
+                        {usernameEditing ?
+                            <label aria-label="Entrez votre nom d'utilisateur" id="label-pseudo" htmlFor="Pseudo"><strong className="w-100"></strong>
+                                <input type="text" id="Pseudo" placeholder="votre nouveau pseudo" />
+                            </label>
+                        :<></>}
                         {btnValidName?
                             <span className="spanIcon">
                                 <GiConfirmed className="icon-confirme"  onClick={async()=>await actionPseudo()}/>
@@ -93,7 +113,7 @@ const Profile = ({setArticles}) => {
                         }
                         {hideName ?  
                             <span>
-                                <MdHighlightOff className="icon-pen text-danger notvalid"  onClick={()=>{
+                                <MdHighlightOff className="icon-pen notvalid" aria-controls="Pseudo" aria-label="Toggle navigation" onClick={()=>{
                                     validations.remove_validations_errors()
                                     setUsernameEditing(!usernameEditing)
                                     setBtnValidName(!btnValidName)
@@ -111,15 +131,18 @@ const Profile = ({setArticles}) => {
                 {/* POPUP */ modifyEmail? <Popup message={'Votre email a été modifié !'} setModifyEmail={setModifyEmail} modifyEmail={modifyEmail} />:null}
                 <ListGroupItem>
                     <div className="w-100">
-                        <label aria-label="Entrez votre adresse email" id="label-email" htmlFor="Email"><strong className="w-100">Email " {profile.email} "</strong>
-                            {userEmailEditing?<input type="email" id="Email" placeholder="votre nouvelle email"/>:<></>}
-                        </label>
+                        <p className="m-0 w-100"><strong id="dplEmail">Email " {profile.email} "</strong></p>
+                        {userEmailEditing?
+                            <label aria-label="Entrez votre adresse email" id="label-email" htmlFor="Email">
+                                <input type="email" id="Email" placeholder="votre nouvelle email"/>
+                            </label>
+                        :<></>}
                         {btnValidemail?
                             <span className="spanIcon">
                                 <GiConfirmed className="icon-confirme"  onClick={async()=>window.confirm('! ATTENTION ! En modifiant votre email, celui-ci deviendra votre email de connexion\nEtes vous sur de vouloir modifier votre email ?') ? await actionEmail():null}/>
                             </span>:<></>}
                         {hideEmail?
-                            <MdHighlightOff className="icon-pen text-danger notvalid" onClick={()=>{
+                            <MdHighlightOff className="icon-pen text-danger notvalid" aria-controls="Email" aria-label="Toggle navigation" onClick={()=>{
                                 validations.remove_validations_errors()
                                 setUserEmailEditing(!userEmailEditing)
                                 setbtnValidemail(!btnValidemail)
@@ -137,7 +160,7 @@ const Profile = ({setArticles}) => {
                 {/* POPUP */ modifyPass? <Popup message={'Votre mot de passe a été modifié !'} setModifyPass={setModifyPass} modifyPass={modifyPass} />:null}
                 <ListGroupItem >
                 <div className="w-100">
-                            <p className="m-0"><strong className="w-100">Modifier votre mot de passe</strong></p>
+                            <p className="m-0 w-100"><strong id="dplPass">Modifier votre mot de passe</strong></p>
                             {userPassEditing?
                             <>
                             <label aria-label="Entrez votre ancien mot de passe" id="label-pass" htmlFor="Password"><strong className="w-100 my-1">Ancien mot de passe</strong>

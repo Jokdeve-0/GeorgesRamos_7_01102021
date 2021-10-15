@@ -1,0 +1,30 @@
+.openAdmin{
+    font-size:20px;
+    margin-left:2em;
+}
+.h1Profile{
+    margin: .5em .5em;
+    padding: .2em 1em;
+    background: $color-sec;
+    border:2px solid $color-grey-lg;
+    border-radius: 25px;
+    text-shadow: 0 0 2px #fff;
+    font-size:1.2em;
+    width:80%;
+    border-radius:5px;
+    box-shadow: 0px 0px 15px $color-grey-med;
+}
+.article-profile.admin {
+    width:100%;
+    font-size: 1.5em!important;
+    margin:0!important;
+}
+.ranking{
+    display:flex;
+    justify-content: flex-start;
+    align-items: center;
+    width:50%;
+    @media(min-width:350px){
+        justify-content: flex-end;
+    }
+}

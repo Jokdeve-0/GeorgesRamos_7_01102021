@@ -4,6 +4,7 @@ import requestsUser from './RequestsUser'
 import requestsArticle from './RequestsArticle'
 import requestsComment from './RequestsComment'
 import requestsAnswer from './RequestsAnswer'
+import requestsAdmin from './RequestsAdmin'
 
 class InitDatas {
 
@@ -12,9 +13,10 @@ class InitDatas {
         "Profile","genre","search","article","Users","articlesProfile",
         "comments","answers"]
     }
-    /*##################################################################*/
-    /*                 INITIALIZATION & STORE DATAS
-    /*##################################################################*/
+
+    // INITIALIZATION & STORE DATAS
+    /*########################################################*/
+
     /** Initialization of all data for the application
      * @param {OBJECT} user {email,pseudo,password}
      */
@@ -127,57 +129,6 @@ class InitDatas {
         // Store all users infos in localStorage
         localStorage.setItem('Users',JSON.stringify(infosUsersInStore))
     }
-    /*##################################################################*/
-    /*                          DATA RECOVERY
-    /*##################################################################*/
-    /** Retrieve a current token
-     * @returns {STRING} {token}
-     */
-    IsConnect(){
-        const IsToken = localStorage.getItem('ACCESS_TOKEN') ? JSON.parse(localStorage.getItem('ACCESS_TOKEN')) : false
-        return IsToken !== false ? IsToken.ACCESS_TOKEN : IsToken
-    }
-    // CONNECTED 0,USERS 1,USERID 2,PROFILE 3,ARTICLES 4,COMMENTS 5,ANSWERS 6,ARTICLE 7 ###################################
-    getArrayDataGlobal(){
-          // Check if the user has a valid connection ( Redirect the document.location to login or forum )
-    const CONNECTED = this.IsConnect()
-    const USERS = localStorage.getItem('Users') ? JSON.parse(localStorage.getItem('Users')) : []
-    const USERID = localStorage.getItem('User') ? JSON.parse(localStorage.getItem('User')) : false
-    const PROFILE = localStorage.getItem('Profile') ? JSON.parse(localStorage.getItem('Profile')) : []
-    const ARTICLES = localStorage.getItem('all_articles') ? this.set_articles(CONNECTED) : []
-    const COMMENTS = localStorage.getItem('comments') ? JSON.parse(localStorage.getItem('comments')) : []
-    const ANSWERS = localStorage.getItem('answers') ? JSON.parse(localStorage.getItem('answers')) : []
-    const ARTICLE = localStorage.getItem('article') ? JSON.parse(localStorage.getItem('article')) : []
-    return [CONNECTED,USERS,USERID,PROFILE,ARTICLES,COMMENTS,ANSWERS,ARTICLE]
-    
-    }
-
-    /*##################################################################*/
-    /*                 REFRESH, RE-INITIALIZATION & CLEAN DATAS
-    /*##################################################################*/
-    /** Refresh all articles from updated articles
-     * @param {STRING} token 
-     */
-     refresh_articles = async (token,url = '/') => {
-        // Retrieves new data from updated articles
-        const articles = await requestsArticle.all_articles(token)
-        // Re store articles and delete old ones
-        if (articles.all_articles) {
-            localStorage.setItem('all_articles', JSON.stringify(articles.all_articles))
-            localStorage.removeItem('genre')
-            localStorage.removeItem('search')
-            localStorage.removeItem('article')
-        } else {
-            // [ - EXIT - ] If error clean the store & redirect to login page
-            this.cleanStore()
-        }
-    }
-    /** Clean the store of all datas ( Logout )
-     */
-    cleanStore(){
-        this.globalDatas.map(data=>localStorage.removeItem(data))
-        document.location.href = "/login"
-    }
     /**Retrieves the articles according to the parameter in the url
      * @param {STRING} token 
      */
@@ -212,14 +163,34 @@ class InitDatas {
         if(document.location.href.includes('articlesProfile')){
             articles = localStorage.getItem('articlesProfile') !== "undefined" ? JSON.parse(localStorage.getItem('articlesProfile')):null
         }
-        console.log(articles)
-        console.log(typeof(articles))
-
         return articles
     }
-    /*##################################################################*/
-    /*                   HANDLING FUNCTIONS
-    /*##################################################################*/
+    /** Refresh all articles from updated articles
+     * @param {STRING} token 
+     */
+     refresh_articles = async (token) => {
+        // Retrieves new data from updated articles
+        const articles = await requestsArticle.all_articles(token)
+        // Re store articles and delete old ones
+        if (articles.all_articles) {
+            localStorage.setItem('all_articles', JSON.stringify(articles.all_articles))
+            localStorage.removeItem('genre')
+            localStorage.removeItem('search')
+            localStorage.removeItem('article')
+        } else {
+            // [ - EXIT - ] If error clean the store 
+            this.cleanStore()
+        }
+    }
+    /** Clean the store of all datas ( Logout )
+     */
+    cleanStore(){
+        this.globalDatas.map(data=>localStorage.removeItem(data))
+        document.location.href = "/login"
+    }
+
+    // HANDLING FUNCTIONS
+    /*############################*/
     connect = async () => {
         //  Check the form data
         const user = validations.validation_login()
@@ -230,63 +201,27 @@ class InitDatas {
             await this.initializeDatasInStorage(user)
         }
     }
-    search = async (token,search) =>{
-        const req = await requestsArticle.search_articles(token,search)
-        localStorage.setItem('search',JSON.stringify(req.search))
-        document.location.href='/search'
-    }
-    search_genre = async (e,TOKEN,cat) => {
-        e.preventDefault()
-        const array_genre = await requestsArticle.articles_by_genre(TOKEN,cat)
-        localStorage.setItem('genre',JSON.stringify(array_genre.genre))
-        document.location.href='/genre'
-    }
     /** Retrieve and format the current date & time
      * @returns {STRING} (dd/mm/yy à hh:mm)
      */
-    FormatDate(){
+     FormatDate(){
         var dateOriginal = new Date()
         var dateStr = dateOriginal.toLocaleString()
         var date = dateStr.split(' ')[0].substring(0,dateStr.split(' ')[0].length-1)
         var time =  dateStr.split(' ')[1].substring(0,dateStr.split(' ')[1].length-3)
         return `${date} à ${time}`
     }
-    /** Retrieve all articles in order of most like
-     * @param {OBJECT} popular 
-     * @returns {OBJECT} sort
-     */
-    call_popular = (popular)=> {
-        popular.sort(function compare(a, b) {
-            if (a.voteFor < b.voteFor) 
-                return -1
-            if (a.voteFor > b.voteFor) 
-                return 1
-            return 0
-        })
-        return popular.reverse()
-    }
-    /** Retrieve all articles in the order of the most votes
-     * @param {OBJECT} tendance 
-     * @returns {OBJECT} sort
-     */
-    call_tendance = (tendance)=> {
-        tendance.sort(function compare(a, b) {
-            if (a.voteFor+a.voteAgainst < b.voteFor+b.voteAgainst)
-               return -1
-            if (a.voteFor+a.voteAgainst > b.voteFor+b.voteAgainst )
-               return 1
-            return 0
-          })
-          return tendance.reverse()
-    }
+    
+    // ARTICLE
+    /*############################*/
     create_article = async (fileData,PROFILE,TOKEN)=>{
         if(validations.validation_article()){
             
-            const data = new FormData();
-            data.append("image", fileData);
+            const data = new FormData()
+            data.append("image", fileData)
             data.append("pseudo",PROFILE.pseudo)
-            data.append("message", document.getElementById('message').value);
-            data.append("genre", document.getElementById('genre').value);
+            data.append("message", document.getElementById('message').value)
+            data.append("genre", document.getElementById('genre').value)
             data.append("dates", this.FormatDate())
             const req = await requestsArticle.create_article(TOKEN,data)
             if(req.error){
@@ -297,6 +232,19 @@ class InitDatas {
             return true
         }
         return false
+    }
+    repost_article = async (token,article,profile)=>{
+        const data = new FormData()
+        data.append("message", article.message)
+        data.append("genre", article.genre)
+        data.append("dates", this.FormatDate())
+        data.append("pseudo", profile.pseudo)
+        data.append("image", article.image)
+        data.append("oldPseudo", article.pseudo)
+        data.append("repost", true)
+        const req = await requestsArticle.repost_article(token,data)
+        console.log(req)
+
     }
     call_article = async (TOKEN,id) => {
         const req = await requestsArticle.one_article(TOKEN,id)
@@ -321,20 +269,101 @@ class InitDatas {
     }
     delete_article = async (TOKEN,article) => {
         await requestsArticle.delete_article(TOKEN,article)
-        await this.refresh_articles(TOKEN,'/forum')
+        await this.refresh_articles(TOKEN)
     }
-    /** Modify the pseudo
-     * @param {STRING} token
-     * @param {OBJECT} users
-     */
-    change_pseudo = async (token, users) => {
+    liked_article = async (token,articleId,likers,numberOfFor,userId)=>{
+        let container = likers,message ="",newNumberOfFor = 0
+        if(!likers.includes(userId)){
+            container.push(userId)
+            newNumberOfFor = numberOfFor + 1
+            message = '✅ You liked the article ✅'
+        }else{
+            container.splice(container.indexOf(userId),1)
+            newNumberOfFor = numberOfFor -1
+            message = '✅ You have removed your liking from the article ✅'
+        }
+        const datas = {articleId:articleId,userFor:JSON.stringify(container),voteFor:newNumberOfFor,message:message}
+        await requestsArticle.liked(token,datas)
+        await this.refresh_articles(token)
+    }
+    disliked_article = async (token,articleId,dislikers,numberOfAgainst,userId)=>{
+        let container = dislikers,message ="",newNumberOfAgainst = 0
+        if(!dislikers.includes(userId)){
+            container.push(userId)
+            newNumberOfAgainst = numberOfAgainst + 1
+            message = '✅ You disliked the article ✅'
+        }else{
+            container.splice(container.indexOf(userId),1)
+            newNumberOfAgainst = numberOfAgainst -1
+            message = '✅ You have removed your disliking from the article ✅'
+        }
+        const datas = {articleId:articleId,userAgainst:JSON.stringify(container),voteAgainst:newNumberOfAgainst,message:message}
+        await requestsArticle.disliked(token,datas)
+        await initDatas.refresh_articles(token)
+    }
+
+    // COMMENT
+    /*############################*/
+    send_comment= async (token,userId,pseudo,articleId,inputId)=>{
+        var smsOk = validations.validations_comment(inputId)
+        if(smsOk.comment){
+            const data = {pseudo:pseudo, articleId:articleId, comment:document.getElementById(inputId).value, creatorId:userId,dates:this.FormatDate()}
+            const req = await requestsComment.create_comment(token,data)
+            if(req.error){
+                return {error:req.error}
+            }
+            document.getElementById(inputId).value =""
+            await this.initializeGlobalDatas({token:token})
+        }
+    }
+    calculComments = (comments,article,answers) => {
+        let commentArray = []
+        comments.map(comment => comment.articleId === article.id ? commentArray.push(comment):null)
+        answers.map(answer => answer.articleId === article.id ? commentArray.push(answer):null )
+        return commentArray
+    }
+
+    // ANSWER
+    /*############################*/
+    send_answer = async (TOKEN,inputId,commentId,pseudo,creatorId,article) => {
+
+        var smsOk = validations.validations_comment(inputId)
+        if(smsOk.comment){
+            const data = {commentId:commentId,articleId:article.id,creatorId:creatorId,pseudo:pseudo,message:document.getElementById(inputId).value,dates:this.FormatDate(),userId:creatorId}
+            const req = await requestsAnswer.create_answer(TOKEN,data)
+            if(req.error){
+                return {error:req.error}
+            }
+            document.getElementById(inputId).value =""
+            await this.initializeGlobalDatas({token:TOKEN})
+        }
+    }
+
+    // USER
+    /*############################*/
+    change_password=async(token,userId)=>{
+        var oldPass = validations.validations_password()
+        var newPass = validations.validations_confPassword()
+        if(oldPass.password && newPass.confPassword){
+            const data = {oldPassword:document.getElementById('Password').value,newPassword:document.getElementById('confPassword').value,userId:userId}
+            const req = await requestsUser.modify_pass(token,data)
+            if(req.error){
+                return {error:req.error}
+            }
+            document.getElementById('Password').value =""
+            document.getElementById('confPassword').value =""
+            return req
+        }
+    }
+    change_pseudo = async (token, userId,oldPseudo) => {
         // Check the form data
         const user = validations.validations_pseudo()
         if(user){
             // Rebuild the form data
             const datas = {
-                id: users,
-                pseudo: user.pseudo
+                id: userId,
+                pseudo: user.pseudo,
+                oldPseudo: oldPseudo
             }
             // Send the form
             const userMod = await requestsUser.modify_pseudo(token, datas)
@@ -344,7 +373,7 @@ class InitDatas {
                 return false
             }
             // Retrieve infos of current user
-            const RetrieveUser = await requestsUser.one_profile(token, users)
+            const RetrieveUser = await requestsUser.one_profile(token, userId)
             if (!RetrieveUser.error) {
                 const cur_user = RetrieveUser.user[0]
                 // Save infos of the current user in localStorage
@@ -358,10 +387,6 @@ class InitDatas {
         }
         return false
     }
-    /** Modify the email
-     * @param {STRING} token
-     * @param {OBJECT} users
-     */
     change_email = async (token, users) => {
         // Check the form data
         const user = validations.validations_email()
@@ -394,10 +419,6 @@ class InitDatas {
         }
         return false
     }
-    /** Delete a user's account
-     * @param {STRING} token 
-     * @param {OBJECT} email 
-     */
     delete_profile = async (token, email) => {
         //  Suppress error message
         validations.remove_validations_errors()
@@ -416,81 +437,72 @@ class InitDatas {
             document.location.href = '/bye'
         }
     }
-    send_comment= async (token,userId,pseudo,articleId,inputId)=>{
+    delete_profile_admin = async (token, email) => {
+        //  Suppress error message
+        validations.remove_validations_errors()
+        // send data for deletion
+        const userRemoved = await requestsAdmin.remove_profile(token, email)
+        console.log(userRemoved)
+        if (userRemoved.error) {
+            // create element for error message
+            const p = document.createElement("p")
+            p.setAttribute("id", "error-email")
+            p.innerHTML = userRemoved.error.includes('Invalid') ? `${userRemoved.error}` : `🛑  L'utilisateur n'existe pas ! 🛑  <br/> ${userRemoved.error}`
+            // Display error message
+            document.getElementById('user-profile').before(p)
+        } 
+        return true
+    }
 
-        var smsOk = validations.validations_comment(inputId)
-        if(smsOk.comment){
-            const data = {pseudo:pseudo, articleId:articleId, comment:document.getElementById(inputId).value, creatorId:userId,dates:this.FormatDate()}
-            const req = await requestsComment.create_comment(token,data)
-            if(req.error){
-                return {error:req.error}
-            }
-            document.getElementById(inputId).value =""
-            await this.initializeGlobalDatas({token:token})
-        }
+    // CALL ARTICLES
+    /*############################*/
+    /** Retrieve all articles by keyword
+     * @param {STRING} token 
+     * @param {STRING} search
+     */
+     search = async (token,search) =>{
+        const req = await requestsArticle.search_articles(token,search)
+        localStorage.setItem('search',JSON.stringify(req.search))
+        document.location.href='/search'
     }
-    calculComments = (comments,article,answers) => {
-        let commentArray = []
-        comments.map(comment => comment.articleId === article.id ? commentArray.push(comment):null)
-        answers.map(answer => answer.articleId === article.id ? commentArray.push(answer):null )
-        return commentArray
+    /** Retrieve all articles by genre
+     * @param {EVENT} e
+     * @param {STRING} token 
+     * @param {STRING} cat
+     */
+    search_genre = async (e,token,cat) => {
+        e.preventDefault()
+        const array_genre = await requestsArticle.articles_by_genre(token,cat)
+        localStorage.setItem('genre',JSON.stringify(array_genre.genre))
+        document.location.href='/genre'
     }
-    send_answer = async (TOKEN,inputId,commentId,pseudo,creatorId,article) => {
-
-        var smsOk = validations.validations_comment(inputId)
-        if(smsOk.comment){
-            const data = {commentId:commentId,articleId:article.id,creatorId:creatorId,pseudo:pseudo,message:document.getElementById(inputId).value,dates:this.FormatDate(),userId:creatorId}
-            const req = await requestsAnswer.create_answer(TOKEN,data)
-            if(req.error){
-                return {error:req.error}
-            }
-            document.getElementById(inputId).value =""
-            await this.initializeGlobalDatas({token:TOKEN})
-        }
+    /** Retrieve all articles in order of most like
+     * @param {OBJECT} popular 
+     * @returns {OBJECT} sort
+     */
+    call_popular = (popular)=> {
+        popular.sort(function compare(a, b) {
+            if (a.voteFor < b.voteFor) 
+                return -1
+            if (a.voteFor > b.voteFor) 
+                return 1
+            return 0
+        })
+        return popular.reverse()
     }
-    liked_article = async (token,articleId,likers,numberOfFor,userId)=>{
-        let container = likers,message ="",newNumberOfFor = 0
-        if(!likers.includes(userId)){
-            container.push(userId)
-            newNumberOfFor = numberOfFor + 1
-            message = '✅ You liked the article ✅'
-        }else{
-            container.splice(container.indexOf(userId),1)
-            newNumberOfFor = numberOfFor -1
-            message = '✅ You have removed your liking from the article ✅'
-        }
-        const datas = {articleId:articleId,userFor:JSON.stringify(container),voteFor:newNumberOfFor,message:message}
-        await requestsArticle.liked(token,datas)
-        await this.refresh_articles(token)
-    }
-    disliked_article = async (token,articleId,dislikers,numberOfAgainst,userId)=>{
-        let container = dislikers,message ="",newNumberOfAgainst = 0
-        if(!dislikers.includes(userId)){
-            container.push(userId)
-            newNumberOfAgainst = numberOfAgainst + 1
-            message = '✅ You disliked the article ✅'
-        }else{
-            container.splice(container.indexOf(userId),1)
-            newNumberOfAgainst = numberOfAgainst -1
-            message = '✅ You have removed your disliking from the article ✅'
-        }
-        const datas = {articleId:articleId,userAgainst:JSON.stringify(container),voteAgainst:newNumberOfAgainst,message:message}
-        await requestsArticle.disliked(token,datas)
-        await initDatas.refresh_articles(token)
-    }
-    change_password=async(token,userId)=>{
-        var oldPass = validations.validations_password()
-        var newPass = validations.validations_confPassword()
-        if(oldPass.password && newPass.confPassword){
-            const data = {oldPassword:document.getElementById('Password').value,newPassword:document.getElementById('confPassword').value,userId:userId}
-            const req = await requestsUser.modify_pass(token,data)
-            if(req.error){
-                return {error:req.error}
-            }
-            document.getElementById('Password').value =""
-            document.getElementById('confPassword').value =""
-            return req
-        }
+    /** Retrieve all articles in the order of the most votes
+     * @param {OBJECT} tendance 
+     * @returns {OBJECT} sort
+     */
+    call_tendance = (tendance)=> {
+        tendance.sort(function compare(a, b) {
+            if (a.voteFor+a.voteAgainst < b.voteFor+b.voteAgainst)
+               return -1
+            if (a.voteFor+a.voteAgainst > b.voteFor+b.voteAgainst )
+               return 1
+            return 0
+          })
+          return tendance.reverse()
     }
 }
 const initDatas = new InitDatas()

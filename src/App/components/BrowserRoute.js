@@ -1,4 +1,4 @@
-import React,{useEffect} from "react"
+import React from "react"
 import { BrowserRouter, Switch,Route} from "react-router-dom"
 // COMPONENTS
 import Footer from "./header&footer/Footer"
@@ -12,15 +12,6 @@ import { DatasContext } from "../../App"
 import AdminPanel from "./layouts/AdminPanel"
 
 const BrowserRoute = () => {
-
-    /*# HIDE THE SPINNER #*/
-    useEffect(()=>{
-        const ele = document.getElementById('spinner')
-        if(ele){
-            setTimeout(()=>{ele.classList.add('hide')},10)
-            setTimeout(() => {ele.outerHTML = ''}, 3000)
-        }
-    })
 
     /*# IS CONNECTED ? #*/
     const datas= React.useContext(DatasContext)

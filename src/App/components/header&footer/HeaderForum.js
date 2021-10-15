@@ -6,7 +6,7 @@ import initDatas from '../../utils/InitDatas'
 
 const HeaderForum = ({token,profile}) => {
     return(<>
-    <Navbar bg="dark" expand="lg">
+    <Navbar bg="dark" expand="lg" aria-label="Menu de navigation">
         <Navbar.Brand href="#"><img src={logo} alt="Logo de Groupomania, leader en grande distribution" onClick={()=>{document.location.href='/'}}/></Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
@@ -14,16 +14,16 @@ const HeaderForum = ({token,profile}) => {
                 <NavLink className="btn-hover profile mb-1" aria-label="Lien vers votre profile" to="/account"></NavLink>
                 <NavLink className="btn-hover logout mb-1" aria-label="Lien de déconnexion" to="/" onClick={()=>{initDatas.cleanStore()}}></NavLink>
             </Nav>
-            <Form className="d-flex">
-                <FormControl
-                    id="search"
-                    name="search"
-                    type="search"
-                    placeholder="Search"
-                    className="mr-2"
-                    aria-label="Search"
-                />
-                <Button variant="outline-danger" type="button" onClick={async()=>{
+            <Form className="d-flex" aria-label="Recherche un article">
+                    <FormControl
+                        id="search"
+                        name="search"
+                        type="search"
+                        placeholder="Search"
+                        className="mr-2"
+                        aria-label="Rechercher un article"
+                    />
+                <Button variant="outline-light" type="button" onClick={async()=>{
                     await initDatas.search(token,document.getElementById('search').value)
                 }}>Search</Button>
             </Form>

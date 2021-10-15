@@ -10,7 +10,6 @@ const Article = ({article,setArticles,admin}) => {
     const token = datas.token[0].ACCESS_TOKEN
     const profile = datas.profile[0]
     
-
     let isThereImg = article.image === "" ? false : true
     let classCSS = "card-img-top"
 
@@ -23,19 +22,13 @@ const Article = ({article,setArticles,admin}) => {
         }
     }
     
-
     return (
         <Card className="bg-light">
-
-            {isThereImg ? <img alt={`${article.message}-${article.id}`} className={classCSS} src={article.image}  /> : null }
-
             <CardArticle token={token} article={article} profile={profile} setArticles={setArticles} admin={admin} />
-        
-        {article.valide !== 0 ? 
-            null:
-            <CardComment article={article} token={token}  setArticles={setArticles} userId={profile.id} profile={profile} admin={admin}/>
-        }
-
+            {isThereImg ? <img alt={`article-${article.id}`} className={classCSS} src={article.image}  /> : null }
+            {article.valide !== 0 ? null:
+                <CardComment article={article} token={token} setArticles={setArticles} userId={profile.id} profile={profile} admin={admin}/>
+            }
         </Card>
     )
 }
