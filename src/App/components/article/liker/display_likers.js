@@ -1,3 +1,4 @@
+import React from "react"
 import initDatas from "../../../utils/InitDatas"
 import {FaRegThumbsUp} from "react-icons/fa"
 

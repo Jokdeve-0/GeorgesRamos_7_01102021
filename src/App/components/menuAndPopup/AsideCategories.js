@@ -1,3 +1,4 @@
+import React from "react"
 import { NavLink } from "react-router-dom"
 import initDatas from "../../utils/InitDatas"
 import categories from "../../datas/categories"

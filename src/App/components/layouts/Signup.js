@@ -50,7 +50,7 @@ function Signup(){
                         <div>
                             <label htmlFor="Pseudo" aria-label="Entrez votre nom d'utilisateur">Nom d'utilisateur</label>
                             <input type="text" id="Pseudo"  placeholder="Entrez votre nom d'utilisateur" />
-                            <small> ⚠️ Au minimum deux caratères</small>
+                            <small> <span role="img" aria-label="Warning">⚠️</span> Au minimum deux caratères</small>
                         </div>
                         <div>
                             <label aria-label="Entrez votre adresse email" htmlFor="Email">Email</label>
@@ -59,7 +59,7 @@ function Signup(){
                         <div>
                             <label htmlFor="Password">Password</label>
                             <input type="password" id="Password" placeholder="********" />
-                            <small> ⚠️ Au minimum une minuscule, une majuscule, un chiffre, un caratère spécial et au moins 8 caratères</small>
+                            <small> <span role="img" aria-label="Warning">⚠️</span> Au minimum une minuscule, une majuscule, un chiffre, un caratère spécial et au moins 8 caratères</small>
                         </div>
                         <button type="button" className="btn-form" aria-label="boutton pour valider le formulaire d'inscription"
                         onClick={async()=>{
